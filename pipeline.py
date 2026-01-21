@@ -32,21 +32,27 @@ def preprocess_data(load_data):
 def generate_eda(load_data):
     df = load_data
 
+    df_clean = df[(df['trip_total'] > 0) & (df['trip_total'] < 150)]
+    df_clean = df_clean[(df['trip_miles'] > 0) & (df['trip_miles'] < 50)]
+    
     if not os.path.exists("eda_plots"):
         os.makedirs("eda_plots")
-
-    # Fare Distribution
-    plt.figure(figsize=(5, 4))
-    sns.histplot(df['trip_total'], bins=50)
-    plt.title("Distribution of Trip Totals")
-    plt.savefig("eda_plots/trip_total_dist.png")
+    
+    #Correlation Heatmap
+    plt.figure(figsize=(10, 8))
+    numeric_df = df_clean[['trip_seconds', 'trip_miles', 'fare', 'tips', 'trip_total']]
+    sns.heatmap(numeric_df.corr(), annot=True, cmap='coolwarm', fmt=".2f")
+    plt.title("Feature Correlation Matrix")
+    plt.tight_layout()
+    plt.savefig("eda_plots/correlation_heatmap.png")
     plt.close()
-
-    # Trip Miles vs Fare
-    plt.figure(figsize=(5, 4))
-    sns.scatterplot(x=df['trip_miles'], y=df['trip_total'])
-    plt.title("Trip Miles vs Fare")
-    plt.savefig("eda_plots/miles_vs_fare.png")
+    
+    #Distribution of Trip Total
+    plt.figure(figsize=(10, 6))
+    sns.histplot(df_clean['trip_total'], bins=50, kde=True, color='teal')
+    plt.title("Distribution of Trip Fares (Filtered < $150)")
+    plt.xlabel("Total Fare ($)")
+    plt.savefig("eda_plots/trip_total_dist.png")
     plt.close()
 
     return "EDA plots saved to /eda_plots folder"
@@ -105,4 +111,5 @@ defs = Definitions(
         train_linear_regression,
         compare_models
     ]
+
 )
