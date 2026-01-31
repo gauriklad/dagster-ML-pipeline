@@ -12,7 +12,7 @@ Unlike fragile Jupyter Notebooks, this pipeline treats data and models as **Ops 
 The pipeline consists of the following assets:
 1. `load_data`: Ingests raw CSV data.
 2. `preprocess_data`: Cleans null values and performs train-test splits.
-3. `train_models`: Trains Decision Tree, Random Forest, and Linear Regression models in parallel.
+3. `train_decision_tree, train_random_forest, train_linear_regression`: Trains Decision Tree, Random Forest, and Linear Regression models in parallel.
 4. `compare_models`: Evaluates MAE and selects the best model.
 
 ## Results & Efficiency
